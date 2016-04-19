@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: gs_test_ep
+Bundle-SymbolicName: tuman.gs_test_ep
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: tuman.gs_test.ep.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: tuman

@@ -5,6 +5,8 @@ package tuman.gs_test.ep;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import tuman.gs_test.Acuario;
+
 
 
 /**
@@ -30,13 +32,15 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		System.out.println("START tuman.gs_test_ep");
+		Acuario acuario = Acuario.randomAquario();
+		System.out.println(acuario);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-		System.out.println("STOP tuman.gs_test_ep");
+		System.out.println("STOP tuman.gs_test_ep:");
 	}
 
 	/**

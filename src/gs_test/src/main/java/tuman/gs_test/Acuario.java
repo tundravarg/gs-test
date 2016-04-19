@@ -3,6 +3,7 @@ package tuman.gs_test;
 
 
 import java.util.Arrays;
+import java.util.Random;
 
 
 
@@ -34,6 +35,13 @@ public class Acuario {
 		}
 
 	}
+
+
+
+	/**
+	 * Генератор чисел.
+	 */
+	private static Random random = new Random(System.currentTimeMillis());
 
 
 
@@ -123,6 +131,20 @@ public class Acuario {
 		} else if (column.ground + column.water > h) {
 			column.water = h - column.ground;
 		}
+	}
+
+
+
+	/**
+	 * Создать случайный аквариум.
+	 * @return аквариум.
+	 */
+	public static Acuario randomAquario() {
+		int[] bottom = new int[random.nextInt(50) + 1];
+		for (int i = 0, n = bottom.length; i < n; i++) {
+			bottom[i] = random.nextInt(10);
+		}
+		return new Acuario(bottom);
 	}
 
 }

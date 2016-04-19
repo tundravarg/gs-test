@@ -67,7 +67,7 @@ public class Acuario {
 		for (int i = 0; i < depth; i++) {
 			int h = depth - i - 1;
 			for (Column column: contents)
-				sb.append(h >= column.ground + column.water ? ' ' : h >= column.ground ? '~' : '#');
+				sb.append(h >= column.ground + column.water ? ' ' : h >= column.ground ? '~' : '@');
 			sb.append('\n');
 		}
 		return sb.toString();
@@ -98,31 +98,30 @@ public class Acuario {
 	 * Слить воду в дырки.
 	 */
 	public void pourOut() {
-		int h = 0;
-		for (int i = 0, n = contents.length; i < n; i++) {
-			Column column = contents[i];
-			if (column.ground == 0) {
-				column.water = 0;
-				h = 0;
-			} else if (column.ground >= h) {
-				column.water = 0;
-				h = column.ground;
-			} else if (column.ground + column.water > h) {
-				column.water = h - column.ground;
-			}
-		}
-		h = 0;
-		for (int i = contents.length - 1; i >= 0; i--) {
-			Column column = contents[i];
-			if (column.ground == 0) {
-				column.water = 0;
-				h = 0;
-			} else if (column.ground >= h) {
-				column.water = 0;
-				h = column.ground;
-			} else if (column.ground + column.water > h) {
-				column.water = h - column.ground;
-			}
+		int ph[] = new int[1];
+		ph[0] = 0;
+		for (int i = 0, n = contents.length; i < n; i++)
+			pourOut(contents[i], ph);
+		ph[0] = 0;
+		for (int i = contents.length - 1; i >= 0; i--)
+			pourOut(contents[i], ph);
+	}
+
+	/**
+	 * Слить воду.
+	 * @param column Колонка.
+	 * @param ph Ссылка на текущий уровень.
+	 */
+	private void pourOut(Column column, int[] ph) {
+		int h = ph[0];
+		if (column.ground == 0) {
+			column.water = 0;
+			ph[0] = 0;
+		} else if (column.ground >= h) {
+			column.water = 0;
+			ph[0] = column.ground;
+		} else if (column.ground + column.water > h) {
+			column.water = h - column.ground;
 		}
 	}
 

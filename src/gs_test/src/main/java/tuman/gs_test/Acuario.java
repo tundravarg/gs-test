@@ -56,6 +56,7 @@ public class Acuario {
 	public Acuario(int[] bottom) {
 		setBottom(bottom);
 		fill();
+		pourOut();
 	}
 
 
@@ -66,7 +67,7 @@ public class Acuario {
 		for (int i = 0; i < depth; i++) {
 			int h = depth - i - 1;
 			for (Column column: contents)
-				sb.append(h >= column.ground + column.water ? '.' : h >= column.ground ? '~' : '#');
+				sb.append(h >= column.ground + column.water ? ' ' : h >= column.ground ? '~' : '#');
 			sb.append('\n');
 		}
 		return sb.toString();
@@ -91,6 +92,38 @@ public class Acuario {
 	public void fill() {
 		for (Column column: contents)
 			column.water = depth - column.ground;
+	}
+
+	/**
+	 * Слить воду в дырки.
+	 */
+	public void pourOut() {
+		int h = 0;
+		for (int i = 0, n = contents.length; i < n; i++) {
+			Column column = contents[i];
+			if (column.ground == 0) {
+				column.water = 0;
+				h = 0;
+			} else if (column.ground >= h) {
+				column.water = 0;
+				h = column.ground;
+			} else if (column.ground + column.water > h) {
+				column.water = h - column.ground;
+			}
+		}
+		h = 0;
+		for (int i = contents.length - 1; i >= 0; i--) {
+			Column column = contents[i];
+			if (column.ground == 0) {
+				column.water = 0;
+				h = 0;
+			} else if (column.ground >= h) {
+				column.water = 0;
+				h = column.ground;
+			} else if (column.ground + column.water > h) {
+				column.water = h - column.ground;
+			}
+		}
 	}
 
 }

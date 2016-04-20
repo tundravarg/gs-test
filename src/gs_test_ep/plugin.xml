@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="tuman.gs_test.ep.AcuarioEditor"
+            default="false"
+            id="gs_test_ep.AcuarioEditor"
+            name="Acuario">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="tuman.gs_test.ep.CreateAcuarioCommand"
+            id="gs_test_ep.CreateAcuario"
+            name="Create an acuario">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               label="Acuario">
+            <command
+                  commandId="gs_test_ep.CreateAcuario"
+                  label="Create random acuario"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+
+</plugin>

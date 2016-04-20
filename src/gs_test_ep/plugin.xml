@@ -9,6 +9,12 @@
             id="gs_test_ep.AcuarioEditor"
             name="Acuario">
       </editor>
+      <editor
+            class="tuman.gs_test.ep.GLAcuarioEditor"
+            default="false"
+            id="gs_test_ep.GLAcuarioEditor"
+            name="GL Acuario">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -16,6 +22,11 @@
             defaultHandler="tuman.gs_test.ep.CreateAcuarioCommand"
             id="gs_test_ep.CreateAcuario"
             name="Create an acuario">
+      </command>
+      <command
+            defaultHandler="tuman.gs_test.ep.CreateGLAcuarioCommand"
+            id="gs_test_ep.CreateGLAcuario"
+            name="Create OpenGL acuario">
       </command>
    </extension>
    <extension
@@ -28,6 +39,11 @@
             <command
                   commandId="gs_test_ep.CreateAcuario"
                   label="Create random acuario"
+                  style="push">
+            </command>
+            <command
+                  commandId="gs_test_ep.CreateGLAcuario"
+                  label="Create random OpenGL acuario"
                   style="push">
             </command>
          </menu>

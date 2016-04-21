@@ -12,7 +12,7 @@ import com.jogamp.opengl.glu.GLU;
  * Камера.
  * @author Sergei Tumanov
  */
-public class GLCamera {
+public class GLCamera implements IGLObject {
 
 	/** Растояние до цели. */
 	private double distance;
@@ -50,10 +50,7 @@ public class GLCamera {
 
 
 
-	/**
-	 * Применить параметры камеры.
-	 * @param glContext Контекст OpenGL.
-	 */
+	@Override
 	public void paint(GLContext glContext) {
 		GL2 gl = glContext.getGL().getGL2();
 
@@ -66,6 +63,10 @@ public class GLCamera {
 		gl.glTranslated(0.0, 0.0, -distance);
 		gl.glRotated(pitch, 1.0, 0.0, 0.0);
 		gl.glRotated(yaw, 0.0, 0.0, -1.0);
+
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glViewport(0, 0, viewWidth, viewHeight);
 	}
 
 

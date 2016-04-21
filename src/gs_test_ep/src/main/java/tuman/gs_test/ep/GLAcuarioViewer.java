@@ -23,7 +23,9 @@ import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
 
 import tuman.gs_test.Acuario;
+import tuman.gs_test.ep.gl.GLAxes;
 import tuman.gs_test.ep.gl.GLCamera;
+import tuman.gs_test.ep.gl.GLScene;
 
 
 
@@ -45,33 +47,12 @@ public class GLAcuarioViewer extends Viewer {
 			glContext.makeCurrent();
 			GL2 gl = glContext.getGL().getGL2();
 
-			Point bounds = canvas.getSize();
-			camera.setViewSize(bounds.x, bounds.y);
-			camera.paint(glContext);
-
-			gl.glMatrixMode(GL2.GL_MODELVIEW);
-			gl.glLoadIdentity();
-			gl.glViewport(0, 0, bounds.x, bounds.y);
-
 			gl.glClearColor(1f, 1f, 1f, 1f);
 			gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 
-			gl.glLineWidth(2.0f);
-			gl.glBegin(GL2.GL_LINES);
-				gl.glColor3f(1f, 0f, 0f);
-				gl.glVertex3f(-10.0F,  0.0F, 0.0F);
-				gl.glVertex3f( 100.0F, 0.0F, 0.0F);
-			gl.glEnd();
-			gl.glBegin(GL2.GL_LINES);
-				gl.glColor3f(0f, 1f, 0f);
-				gl.glVertex3f(0.0F, -10.0F,  0.0F);
-				gl.glVertex3f(0.0F,  100.0F, 0.0F);
-			gl.glEnd();
-			gl.glBegin(GL2.GL_LINES);
-				gl.glColor3f(0f, 0f, 1f);
-				gl.glVertex3f(0.0F, 0.0F, -10.0F);
-				gl.glVertex3f(0.0F, 0.0F,  100.0F);
-			gl.glEnd();
+			Point bounds = canvas.getSize();
+			scene.getCamera().setViewSize(bounds.x, bounds.y);
+			scene.paint(glContext);
 
 			canvas.swapBuffers();
 			glContext.release();
@@ -89,6 +70,7 @@ public class GLAcuarioViewer extends Viewer {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
+			GLCamera camera = scene.getCamera();
 			switch (e.keyCode) {
 				case SWT.ARROW_UP:
 					if ((e.stateMask & SWT.CONTROL) == SWT.CONTROL) {
@@ -130,8 +112,8 @@ public class GLAcuarioViewer extends Viewer {
 	private GLCanvas canvas;
 	/** Контекст OpenGL. */
 	GLContext glContext;
-	/** Камера. */
-	GLCamera camera;
+	/** Сцена. */
+	GLScene scene;
 
 
 
@@ -165,7 +147,16 @@ public class GLAcuarioViewer extends Viewer {
 		canvas.addPaintListener(new ScenePainter());
 		canvas.addKeyListener(new KeyListener());
 
-		camera = new GLCamera(100.0, 0.0, 0.0, 0, 0);
+		createScene();
+	}
+
+	/**
+	 * Создать сцену.
+	 */
+	private void createScene() {
+		scene = new GLScene();
+		scene.setCamera(new GLCamera(200.0, 45.0, -45.0, 0, 0));
+		scene.getChildren().add(new GLAxes());
 	}
 
 

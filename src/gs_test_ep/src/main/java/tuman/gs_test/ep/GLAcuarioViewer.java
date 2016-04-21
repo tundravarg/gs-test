@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Point;
@@ -22,6 +23,7 @@ import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
 
 import tuman.gs_test.Acuario;
+import tuman.gs_test.ep.gl.GLCamera;
 
 
 
@@ -39,14 +41,13 @@ public class GLAcuarioViewer extends Viewer {
 
 		@Override
 		public void paintControl(PaintEvent e) {
-			Point bounds = canvas.getSize();
 			canvas.setCurrent();
-			glcontext.makeCurrent();
-			GL2 gl = glcontext.getGL().getGL2();
+			glContext.makeCurrent();
+			GL2 gl = glContext.getGL().getGL2();
 
-			gl.glMatrixMode(GL2.GL_PROJECTION);
-			gl.glLoadIdentity();
-			gl.glOrtho(-bounds.x / 2, bounds.x / 2, bounds.y / 2, -bounds.y / 2, -100, 100);
+			Point bounds = canvas.getSize();
+			camera.setViewSize(bounds.x, bounds.y);
+			camera.paint(glContext);
 
 			gl.glMatrixMode(GL2.GL_MODELVIEW);
 			gl.glLoadIdentity();
@@ -55,21 +56,17 @@ public class GLAcuarioViewer extends Viewer {
 			gl.glClearColor(1f, 1f, 1f, 1f);
 			gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 
-			gl.glLineWidth(5F);
+			gl.glLineWidth(2.0f);
 			gl.glBegin(GL2.GL_LINES);
 				gl.glColor3f(1f, 0f, 0f);
 				gl.glVertex3f(-10.0F,  0.0F, 0.0F);
 				gl.glVertex3f( 100.0F, 0.0F, 0.0F);
 			gl.glEnd();
-
-			gl.glLineWidth(5F);
 			gl.glBegin(GL2.GL_LINES);
 				gl.glColor3f(0f, 1f, 0f);
 				gl.glVertex3f(0.0F, -10.0F,  0.0F);
 				gl.glVertex3f(0.0F,  100.0F, 0.0F);
 			gl.glEnd();
-
-			gl.glLineWidth(5F);
 			gl.glBegin(GL2.GL_LINES);
 				gl.glColor3f(0f, 0f, 1f);
 				gl.glVertex3f(0.0F, 0.0F, -10.0F);
@@ -77,8 +74,50 @@ public class GLAcuarioViewer extends Viewer {
 			gl.glEnd();
 
 			canvas.swapBuffers();
-			glcontext.release();
+			glContext.release();
 		}
+
+	}
+
+
+
+	/**
+	 * Слушатель клавиатуры.
+	 * @author Sergei Tumanov
+	 */
+	private class KeyListener implements org.eclipse.swt.events.KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			switch (e.keyCode) {
+				case SWT.ARROW_UP:
+					if ((e.stateMask & SWT.CONTROL) == SWT.CONTROL) {
+						System.out.println("adads");
+						camera.setDistance(camera.getDistance() / 1.1);
+					} else {
+						camera.rotate(0.0, 10.0);
+					}
+					break;
+				case SWT.ARROW_DOWN:
+					if ((e.stateMask & SWT.CONTROL) == SWT.CONTROL) {
+						System.out.println("zxczxc");
+						camera.setDistance(camera.getDistance() * 1.1);
+					} else {
+						camera.rotate(0.0, -10.0);
+					}
+					break;
+				case SWT.ARROW_LEFT:
+					camera.rotate(-10.0, 0.0);
+					break;
+				case SWT.ARROW_RIGHT:
+					camera.rotate(10.0, 0.0);
+					break;
+			}
+			canvas.redraw();
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {}
 
 	}
 
@@ -92,7 +131,9 @@ public class GLAcuarioViewer extends Viewer {
 	/** Компонент отображения аквариума. */
 	private GLCanvas canvas;
 	/** Контекст OpenGL. */
-	GLContext glcontext;
+	GLContext glContext;
+	/** Камера. */
+	GLCamera camera;
 
 
 
@@ -121,9 +162,12 @@ public class GLAcuarioViewer extends Viewer {
 
 		canvas.setCurrent();
 		GLProfile glprofile = GLProfile.getDefault();
-		glcontext = GLDrawableFactory.getFactory(glprofile).createExternalGLContext();
+		glContext = GLDrawableFactory.getFactory(glprofile).createExternalGLContext();
 
 		canvas.addPaintListener(new ScenePainter());
+		canvas.addKeyListener(new KeyListener());
+
+		camera = new GLCamera(100.0, 0.0, 0.0, 0, 0);
 	}
 
 
@@ -167,13 +211,14 @@ public class GLAcuarioViewer extends Viewer {
 	 */
 	public void setEnabled(boolean enabled) {
 		control.setEnabled(enabled);
-		enabled &= acuario != null;
 	}
 
 	/**
 	 * Установить фокус.
 	 */
 	public void setFocus() {
+		System.out.println("Focus!");
+		canvas.setFocus();
 	}
 
 

@@ -92,7 +92,6 @@ public class GLAcuarioViewer extends Viewer {
 			switch (e.keyCode) {
 				case SWT.ARROW_UP:
 					if ((e.stateMask & SWT.CONTROL) == SWT.CONTROL) {
-						System.out.println("adads");
 						camera.setDistance(camera.getDistance() / 1.1);
 					} else {
 						camera.rotate(0.0, 10.0);
@@ -100,7 +99,6 @@ public class GLAcuarioViewer extends Viewer {
 					break;
 				case SWT.ARROW_DOWN:
 					if ((e.stateMask & SWT.CONTROL) == SWT.CONTROL) {
-						System.out.println("zxczxc");
 						camera.setDistance(camera.getDistance() * 1.1);
 					} else {
 						camera.rotate(0.0, -10.0);
@@ -217,7 +215,6 @@ public class GLAcuarioViewer extends Viewer {
 	 * Установить фокус.
 	 */
 	public void setFocus() {
-		System.out.println("Focus!");
 		canvas.setFocus();
 	}
 

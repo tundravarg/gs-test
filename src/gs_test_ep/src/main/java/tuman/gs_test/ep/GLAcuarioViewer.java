@@ -17,15 +17,18 @@ import org.eclipse.swt.opengl.GLData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
 
 import tuman.gs_test.Acuario;
 import tuman.gs_test.ep.gl.GLAxes;
+import tuman.gs_test.ep.gl.GLBox;
 import tuman.gs_test.ep.gl.GLCamera;
+import tuman.gs_test.ep.gl.GLInit;
+import tuman.gs_test.ep.gl.GLLight;
 import tuman.gs_test.ep.gl.GLScene;
+import tuman.gs_test.math.Box3D;
 
 
 
@@ -45,10 +48,6 @@ public class GLAcuarioViewer extends Viewer {
 		public void paintControl(PaintEvent e) {
 			canvas.setCurrent();
 			glContext.makeCurrent();
-			GL2 gl = glContext.getGL().getGL2();
-
-			gl.glClearColor(1f, 1f, 1f, 1f);
-			gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 
 			Point bounds = canvas.getSize();
 			scene.getCamera().setViewSize(bounds.x, bounds.y);
@@ -156,7 +155,10 @@ public class GLAcuarioViewer extends Viewer {
 	private void createScene() {
 		scene = new GLScene();
 		scene.setCamera(new GLCamera(200.0, 45.0, -45.0, 0, 0));
+		scene.getChildren().add(new GLInit());
+		scene.getChildren().add(new GLLight());
 		scene.getChildren().add(new GLAxes());
+		scene.getChildren().add(new GLBox(new Box3D(-25.0, -25.0, -25.0, 50.0, 50.0, 50.0), 0x70700000));
 	}
 
 

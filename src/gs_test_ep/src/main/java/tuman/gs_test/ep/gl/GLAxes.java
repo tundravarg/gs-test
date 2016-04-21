@@ -24,6 +24,8 @@ public class GLAxes implements IGLObject {
 	public void paint(GLContext glContext) {
 		GL2 gl = glContext.getGL().getGL2();
 
+		gl.glDisable(GL2.GL_LIGHTING);
+
 		gl.glLineWidth(2.0f);
 
 		gl.glBegin(GL2.GL_LINES);

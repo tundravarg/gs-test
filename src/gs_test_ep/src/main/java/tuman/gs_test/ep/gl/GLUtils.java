@@ -25,7 +25,7 @@ public final class GLUtils {
 	 * @param argb Цвет (ARGB).
 	 */
 	public static void glColor1i(GL2 gl, int argb) {
-		gl.glColor4b((byte)((argb >>> 16) & 0xFF), (byte)((argb >>> 8) & 0xFF), (byte)(argb & 0xFF), (byte)((argb >>> 24) & 0xFF));
+		gl.glColor4d(((argb >>> 16) & 0xFF) / 255.0, ((argb >>> 8) & 0xFF) / 255.0, (argb & 0xFF) / 255.0, ((argb >>> 24) & 0xFF) / 255.0);
 	}
 
 }

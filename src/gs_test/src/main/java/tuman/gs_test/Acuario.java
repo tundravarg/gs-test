@@ -17,7 +17,7 @@ public class Acuario {
 	 * Колонка аквариума.
 	 * @author Sergei Tumanov.
 	 */
-	private static class Column {
+	public static class Column {
 
 		/** Количество клеток основания. */
 		public int ground;
@@ -79,6 +79,24 @@ public class Acuario {
 			sb.append('\n');
 		}
 		return sb.toString();
+	}
+
+
+
+	/**
+	 * Получить содержимое аквариума.
+	 * @return Содержимое аквариума.
+	 */
+	public Column[] getContents() {
+		return contents;
+	}
+
+	/**
+	 * Получить глубину аквариума.
+	 * @return Глубина аквариума.
+	 */
+	public int getDepth() {
+		return depth;
 	}
 
 

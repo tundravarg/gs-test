@@ -22,13 +22,12 @@ import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
 
 import tuman.gs_test.Acuario;
+import tuman.gs_test.ep.gl.GLAcuario;
 import tuman.gs_test.ep.gl.GLAxes;
-import tuman.gs_test.ep.gl.GLBox;
 import tuman.gs_test.ep.gl.GLCamera;
 import tuman.gs_test.ep.gl.GLInit;
 import tuman.gs_test.ep.gl.GLLight;
 import tuman.gs_test.ep.gl.GLScene;
-import tuman.gs_test.math.Box3D;
 
 
 
@@ -158,7 +157,7 @@ public class GLAcuarioViewer extends Viewer {
 		scene.getChildren().add(new GLInit());
 		scene.getChildren().add(new GLLight());
 		scene.getChildren().add(new GLAxes());
-		scene.getChildren().add(new GLBox(new Box3D(-25.0, -25.0, -25.0, 50.0, 50.0, 50.0), 0x70700000));
+		scene.getChildren().add(new GLAcuario(new Acuario(new int[] {2, 1, 3})));
 	}
 
 

@@ -113,6 +113,36 @@ public class Acuario {
 	}
 
 	/**
+	 * Задать основание.
+	 * @param str высоты основания.
+	 * <p>В формате str ::= [ &lt;int&gt; { { ',' | ';' | &lt;space&gt; } &lt;int&gt; } ].
+	 */
+	public void setBottom(String str) {
+		String[] elements = str.split("[,;\\s]+");
+		try {
+			int[] bottom = Arrays.stream(elements)
+					.filter(e -> !e.isEmpty())
+					.mapToInt(Integer::parseInt)
+					.toArray();
+			setBottom(bottom);
+		} catch (NumberFormatException ex) {
+			throw new IllegalArgumentException("Invalid format. Must be [ <int> { { ',' | ';' | <space> } <int> } ]. (123, 456;,  ; 789)");
+		}
+	}
+
+	/**
+	 * Получить строковое преставление высот основания.
+	 * @return Строковое преставление высот основания.
+	 */
+	public String getBottomString() {
+		StringBuilder sb = new StringBuilder();
+		Arrays.stream(contents).forEach(c -> sb.append(c.ground).append(", "));
+		if (sb.length() != 0)
+			sb.setLength(sb.length() - 2);
+		return sb.toString();
+	}
+
+	/**
 	 * Заполнить аквариум водой до верху.
 	 */
 	public void fill() {

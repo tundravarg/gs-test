@@ -16,6 +16,7 @@ import org.eclipse.swt.opengl.GLCanvas;
 import org.eclipse.swt.opengl.GLData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLDrawableFactory;
@@ -28,6 +29,7 @@ import tuman.gs_test.ep.gl.GLCamera;
 import tuman.gs_test.ep.gl.GLInit;
 import tuman.gs_test.ep.gl.GLLight;
 import tuman.gs_test.ep.gl.GLScene;
+import tuman.gs_test.utils.TextListener;
 
 
 
@@ -101,17 +103,53 @@ public class GLAcuarioViewer extends Viewer {
 
 
 
+	/**
+	 * Слушатель изменений поля высот.
+	 * @author Sergei Tumanov
+	 */
+	private class GroundFieldListener extends TextListener {
+
+		/**
+		 * Create new instance.
+		 * @param textField Тектовове поле.
+		 */
+		public GroundFieldListener(Text textField) {
+			super(textField);
+		}
+
+		@Override
+		public void apply(String text) {
+			acuario.setBottom(text);
+			acuario.fill();
+			acuario.pourOut();
+			glAcuario.refresh();
+			canvas.redraw();
+		}
+
+		@Override
+		public String getText() {
+			return acuario.getBottomString();
+		}
+
+	}
+
+
+
 	/** Аквариум. */
 	private Acuario acuario;
 
 	/** Корневой компонент. */
 	private Composite control;
+	/** Поле управления высотами основания. */
+	private Text groundField;
 	/** Компонент отображения аквариума. */
 	private GLCanvas canvas;
 	/** Контекст OpenGL. */
 	GLContext glContext;
 	/** Сцена. */
 	GLScene scene;
+	/** GL-объект Аквариума. */
+	GLAcuario glAcuario;
 
 
 
@@ -131,7 +169,17 @@ public class GLAcuarioViewer extends Viewer {
 	 */
 	private void createControls(Composite parent) {
 		control = new Composite(parent, SWT.NONE);
-		control.setLayout(new GridLayout(1, false));
+
+		GridLayout layout = new GridLayout(1, false);
+		layout.horizontalSpacing = 0;
+		layout.verticalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		control.setLayout(layout);
+
+		groundField = new Text(control, SWT.BORDER);
+		groundField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		new GroundFieldListener(groundField);
 
 		GLData gldata = new GLData();
 		gldata.doubleBuffer = true;
@@ -157,7 +205,7 @@ public class GLAcuarioViewer extends Viewer {
 		scene.getChildren().add(new GLInit());
 		scene.getChildren().add(new GLLight());
 		scene.getChildren().add(new GLAxes());
-		scene.getChildren().add(new GLAcuario(new Acuario(new int[] {2, 1, 3})));
+		scene.getChildren().add(glAcuario = new GLAcuario(acuario));
 	}
 
 
@@ -182,16 +230,17 @@ public class GLAcuarioViewer extends Viewer {
 
 	@Override
 	public void refresh() {
-		if (acuario != null) {
-		} else {
-		}
+		groundField.setText(acuario != null ? acuario.getBottomString() : "");
+		glAcuario.setAcuario(acuario);
+		glAcuario.refresh();
+		setEnabled(isEnabled());
 	}
 
 	/**
 	 * Получить доступность компонента.
 	 * @return Доступность компонента.
 	 */
-	public boolean getEnabled() {
+	public boolean isEnabled() {
 		return control.isEnabled();
 	}
 
@@ -201,6 +250,8 @@ public class GLAcuarioViewer extends Viewer {
 	 */
 	public void setEnabled(boolean enabled) {
 		control.setEnabled(enabled);
+		enabled &= acuario != null;
+		groundField.setEnabled(enabled);
 	}
 
 	/**

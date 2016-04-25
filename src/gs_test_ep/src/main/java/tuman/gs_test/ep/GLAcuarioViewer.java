@@ -24,7 +24,6 @@ import com.jogamp.opengl.GLProfile;
 
 import tuman.gs_test.Acuario;
 import tuman.gs_test.ep.gl.GLAcuario;
-import tuman.gs_test.ep.gl.GLAxes;
 import tuman.gs_test.ep.gl.GLCamera;
 import tuman.gs_test.ep.gl.GLInit;
 import tuman.gs_test.ep.gl.GLLight;
@@ -204,7 +203,7 @@ public class GLAcuarioViewer extends Viewer {
 		scene.setCamera(new GLCamera(200.0, 45.0, -45.0, 0, 0));
 		scene.getChildren().add(new GLInit());
 		scene.getChildren().add(new GLLight());
-		scene.getChildren().add(new GLAxes());
+//		scene.getChildren().add(new GLAxes());
 		scene.getChildren().add(glAcuario = new GLAcuario(acuario));
 	}
 
